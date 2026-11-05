@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mi Moto">
+<meta name="theme-color" content="#121417">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>Mi Moto</title>
+<style>
+:root{--bg:#121417;--card:#1C1F23;--card2:#25292E;--field:#16191C;--line:#2E3238;--tx:#F2F2F0;--mut:#A8ADB4;--mut2:#C3C8CE;--acc:#FF8A3D;--accTx:#1A0E05;--accBg:#2A1C12;--red:#FF8F8F;--redBg:#3A1F21;--redLn:#5A2A2C;--yel:#F5C25E;--yelBg:#3A2E14;--yelLn:#5A4A22;--grn:#7FD99A}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.35}
+#app{padding:calc(env(safe-area-inset-top,0px) + 18px) 18px calc(env(safe-area-inset-bottom,0px) + 104px);max-width:560px;margin:0 auto}
+a{color:var(--acc)}
+h1{font-size:30px;margin:0;font-weight:800;letter-spacing:-.01em}
+h2{font-size:14px;color:var(--mut);font-weight:600;margin:22px 0 8px}
+p{margin:0}
+.sub{color:var(--mut);font-size:13px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.back{display:inline-flex;align-items:center;gap:4px;color:var(--mut);text-decoration:none;font-size:15px;min-height:44px;margin:-8px 0 2px -4px}
+.stack{display:flex;flex-direction:column;gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:block;color:var(--tx);text-decoration:none}
+.card.red{border-color:var(--redLn)} .card.yel{border-color:var(--yelLn)} .card.acc{background:var(--accBg);border:1.5px solid var(--acc)}
+.cardrow{display:flex;align-items:center;gap:12px}
+.cardrow .grow{flex:1 1 auto;min-width:0}
+.ttl{font-size:16px;font-weight:700}
+.det{font-size:13px;color:var(--mut);margin-top:3px}
+.big{font-size:44px;font-weight:800;line-height:1.05;letter-spacing:-.02em}
+.chip{font-size:12px;font-weight:700;padding:4px 8px;border-radius:7px;white-space:nowrap;flex:0 0 auto;color:var(--mut2)}
+.chip.red{color:var(--red);background:var(--redBg)} .chip.yel{color:var(--yel);background:var(--yelBg)} .chip.gry{color:var(--mut);background:var(--card2)} .chip.plain{padding:4px 0;font-weight:600}
+.group{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.group>*{display:flex;align-items:center;gap:10px;min-height:48px;padding:8px 12px 8px 14px;color:var(--tx);text-decoration:none}
+.group>*+*{border-top:1px solid #2A2E33}
+.group .grow{flex:1 1 auto;min-width:0}
+.nm{font-size:15px;font-weight:600}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 16px;border-radius:14px;border:none;background:var(--acc);color:var(--accTx);font:inherit;font-size:16px;font-weight:700;text-decoration:none;width:100%;cursor:pointer}
+.btn.sec{background:var(--card2);color:var(--tx)}
+.btn.danger{background:transparent;color:var(--red);border:1px solid var(--redLn)}
+.btn.sm{min-height:44px;width:auto;font-size:15px;border-radius:22px;padding:0 14px}
+.btn.dash{background:transparent;color:var(--acc);border:1.5px dashed #3A3F46}
+.qa{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:92px;padding:14px;border-radius:16px;background:var(--card);border:1px solid var(--line);color:var(--tx);text-decoration:none;font-weight:700;font-size:15px}
+.qa svg{color:var(--acc)}
+.iconbtn{width:44px;height:44px;border-radius:22px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--line);color:var(--tx)}
+form{display:flex;flex-direction:column;gap:14px}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--mut2);font-weight:600}
+label.f small{font-weight:400;color:var(--mut);font-size:13px}
+input,select,textarea{width:100%;min-height:50px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--tx);font:inherit;font-size:17px;padding:0 12px}
+textarea{padding:12px;min-height:80px}
+input[type=date]{-webkit-appearance:none;appearance:none;display:flex;align-items:center}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);outline-offset:1px}
+.unit{position:relative}.unit span{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--mut);font-size:15px;pointer-events:none}.unit input{padding-right:46px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:12px;border:1px solid var(--line);background:var(--field);font-weight:700;color:var(--mut2)}
+.seg input:checked+label{border-color:var(--acc);background:var(--accBg);color:var(--tx)}
+.seg input:focus-visible+label{outline:2px solid var(--acc)}
+.calc{display:flex;justify-content:space-between;align-items:baseline;padding:12px 14px;border-radius:12px;background:var(--card2)}
+.calc b{font-size:22px}
+.msg{padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.4}
+.msg.err{background:var(--redBg);color:#FFD1D1;border:1px solid var(--redLn)}
+.msg.warn{background:var(--yelBg);color:#FCE3B0;border:1px solid var(--yelLn)}
+.msg.info{background:var(--card2);color:var(--mut2)}
+.concepto{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.concepto .two{display:grid;grid-template-columns:1fr 120px;gap:8px}
+.link{background:none;border:none;color:var(--acc);font:inherit;font-size:15px;font-weight:600;padding:0;min-height:44px;cursor:pointer}
+.del{background:none;border:none;color:var(--mut);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 6px;text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--mut);font-weight:600;font-size:12px;border-bottom:1px solid var(--line)}
+td{border-bottom:1px solid #24282D}
+tr.tot td{font-weight:800;border-bottom:none}
+.scroll{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px 8px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:12px 14px}
+.kv+.kv{border-top:1px solid #2A2E33}
+.kv span:first-child{color:var(--mut2)}
+.kv span:last-child{font-weight:700;text-align:right}
+.note{font-size:13px;color:var(--mut);padding:0 14px 12px;margin-top:-6px}
+.empty{text-align:center;padding:26px 16px;color:var(--mut)}
+nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:#181A1E;border-top:1px solid #2A2E33;padding:6px 4px calc(env(safe-area-inset-bottom,0px) + 6px);z-index:5}
+nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:48px;text-decoration:none;color:var(--mut);font-size:11px;font-weight:600}
+nav a.on{color:var(--acc);font-weight:700}
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);transform:translateX(-50%);background:#F2F2F0;color:#121417;padding:12px 18px;border-radius:24px;font-weight:700;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:10;max-width:90vw;text-align:center}
+#toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<nav id="nav" aria-label="Secciones"></nav>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+/* ========= Datos ========= */
+const KEY = 'mi-moto-datos-v1';
+const COMPONENTES_INICIALES = [
+  {id:'cadena', nombre:'Lavar y lubricar cadena', detalle:'Holgura 10–20 mm y nivel de líquido de frenos', intKm:1000},
+  {id:'aceite', nombre:'Aceite y filtro de aire', detalle:'Aceite 10W-40, 1.2 L. Lavar o cambiar filtro de aire', intKm:3000},
+  {id:'presion', nombre:'Presión de llantas', detalle:'Solo 29/33 psi · con pasajero 33/36 psi, en frío', intDias:15},
+  {id:'revision', nombre:'Revisión general', detalle:'Válvulas, bujía, carburador, batería, frenos, llantas, suspensión, malla del filtro de aceite', intKm:4000},
+  {id:'cables', nombre:'Lubricar cables', detalle:'Acelerador, embrague y eje del pedal de freno', intKm:6000, intMeses:6},
+  {id:'filtrogas', nombre:'Filtro de gasolina', detalle:'Cambiar', intKm:8000},
+  {id:'lubgeneral', nombre:'Lubricación general', detalle:'', intKm:12000, intMeses:12},
+  {id:'mofle', nombre:'Anticorrosivo del mofle', detalle:'50 ml', intMeses:6},
+  {id:'escape', nombre:'Revisar escape y mofle', detalle:'', intMeses:12},
+  {id:'liqfrenos', nombre:'Líquido de frenos', detalle:'Cambiar, delantero y trasero. Solo DOT4', intMeses:24},
+  {id:'direccion', nombre:'Dirección y buje trasero', detalle:'Lubricar', intKm:20000, intMeses:24},
+  {id:'mangueras', nombre:'Mangueras de gasolina y frenos', detalle:'Cambiar', intMeses:48},
+  {id:'balatas', nombre:'Balatas', detalle:'El manual solo pide revisarlas'},
+  {id:'llantas', nombre:'Llantas', detalle:'Cambiar con dibujo de 1.6 mm (del.) o 2 mm (tras.)'},
+  {id:'kit', nombre:'Kit de arrastre', detalle:'Cadena, piñón y corona juntos'}
+];
+function estadoNuevo(){
+  return {v:1, ajustes:{capacidad:20, reserva:3.5}, kms:[], cargas:[], gastos:[], servicios:[],
+    componentes: COMPONENTES_INICIALES.map(c => ({intKm:null,intMeses:null,intDias:null,inicioKm:null,inicioFecha:null,...c})),
+    ultimoRespaldo:null};
+}
+function cargar(){
+  try{ const r = localStorage.getItem(KEY); if(r){ const s = JSON.parse(r); if(s && s.v===1) return s; } }catch(e){}
+  return estadoNuevo();
+}
+let S = cargar();
+function guardar(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); return true; }
+  catch(e){ aviso('No se pudo guardar en el iPhone. Libera espacio y vuelve a intentar.'); return false; }
+}
+if(navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(()=>{}); }
+
+/* ========= Utilidades ========= */
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = v => { const n = parseFloat(String(v).replace(/,/g,'')); return isFinite(n) ? n : null; };
+const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const MESES_L = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function hoy(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function aFecha(iso){ const [y,m,d]=iso.split('-').map(Number); return new Date(y,m-1,d); }
+function aIso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function sumaMeses(iso,n){ const d=aFecha(iso); const dia=d.getDate(); d.setDate(1); d.setMonth(d.getMonth()+n); const ult=new Date(d.getFullYear(),d.getMonth()+1,0).getDate(); d.setDate(Math.min(dia,ult)); return aIso(d); }
+function sumaDias(iso,n){ const d=aFecha(iso); d.setDate(d.getDate()+n); return aIso(d); }
+function difDias(a,b){ return Math.round((aFecha(b)-aFecha(a))/86400000); }
+function fFecha(iso){ if(!iso) return ''; const d=aFecha(iso); return d.getDate()+' '+MESES[d.getMonth()]+' '+d.getFullYear(); }
+function fMes(iso){ const d=aFecha(iso); return MESES[d.getMonth()]+' '+d.getFullYear(); }
+const fNum = (n,dec=0) => Number(n).toLocaleString('es-MX',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+const fKm = n => fNum(Math.round(n))+' km';
+const fMx = (n,dec=2) => '$'+fNum(n,dec);
+
+function kmActual(){
+  let m = 0;
+  S.kms.forEach(x => m = Math.max(m, x.km));
+  S.cargas.forEach(x => m = Math.max(m, x.km));
+  S.servicios.forEach(x => { if(x.km!=null) m = Math.max(m, x.km); });
+  return m;
+}
+function comp(id){ return S.componentes.find(c => c.id===id); }
+function totalServicio(s){ return s.conceptos.reduce((t,c)=>t+(c.importe||0),0); }
+function ordenServ(a,b){ return (b.fecha.localeCompare(a.fecha)) || ((b.km||0)-(a.km||0)); }
+
+/* Último servicio de un componente: el más reciente registrado, o el punto de partida capturado */
+function ultimo(c){
+  const s = S.servicios.filter(s => s.conceptos.some(k => k.compId===c.id)).sort(ordenServ)[0];
+  if(s) return {km:s.km, fecha:s.fecha, servicioId:s.id};
+  if(c.inicioKm!=null || c.inicioFecha) return {km:c.inicioKm, fecha:c.inicioFecha, inicio:true};
+  return null;
+}
+function txtDias(d){
+  if(d<0){ const a=-d; return a>=60 ? 'Vencido hace '+Math.round(a/30)+' meses' : 'Vencido hace '+a+(a===1?' día':' días'); }
+  if(d===0) return 'Toca hoy';
+  if(d>=60) return 'Faltan '+Math.round(d/30)+' meses';
+  return 'Faltan '+d+(d===1?' día':' días');
+}
+function txtKm(k){ return k<0 ? 'Pasado '+fNum(-k)+' km' : 'Faltan '+fNum(k)+' km'; }
+function intervaloTxt(c){
+  const p=[];
+  if(c.intKm) p.push(fNum(c.intKm)+' km');
+  if(c.intMeses) p.push(c.intMeses%12===0 ? (c.intMeses/12===1?'1 año':(c.intMeses/12)+' años') : c.intMeses+(c.intMeses===1?' mes':' meses'));
+  if(c.intDias) p.push(c.intDias+' días');
+  return p.length ? 'Cada '+p.join(' o ') : 'Sin intervalo';
+}
+/* Estado de aviso de un componente */
+function estado(c){
+  const tieneInt = c.intKm || c.intMeses || c.intDias;
+  const u = ultimo(c);
+  if(!tieneInt) return {nivel:'sin', orden:5, u, chip:u?('Último: '+(u.km!=null?fKm(u.km):fFecha(u.fecha))):'Sin registro', clase:u?'plain':'gry'};
+  if(!u) return {nivel:'nore', orden:4, chip:'Sin registro', clase:'gry'};
+  const km = kmActual();
+  let fKmR=null, fDias=null, tocaKm=null, tocaFecha=null;
+  if(c.intKm && u.km!=null){ tocaKm = u.km + c.intKm; fKmR = tocaKm - km; }
+  if((c.intMeses || c.intDias) && u.fecha){ tocaFecha = c.intMeses ? sumaMeses(u.fecha,c.intMeses) : sumaDias(u.fecha,c.intDias); fDias = difDias(hoy(), tocaFecha); }
+  if(fKmR==null && fDias==null) return {nivel:'nore', orden:4, chip:'Sin registro', clase:'gry', u};
+  const umbralKm = c.intKm ? Math.min(300, c.intKm*0.2) : 0;
+  const umbralDias = c.intDias ? 2 : 15;
+  const venceKm = fKmR!=null && fKmR<0, venceD = fDias!=null && fDias<0;
+  const prontoKm = fKmR!=null && fKmR<=umbralKm, prontoD = fDias!=null && fDias<=umbralDias;
+  // fracción de intervalo restante, para ordenar y elegir qué texto mostrar
+  const frKm = fKmR!=null ? fKmR/c.intKm : Infinity;
+  const diasInt = c.intDias || (c.intMeses ? c.intMeses*30 : 0);
+  const frD = fDias!=null ? fDias/diasInt : Infinity;
+  const porKm = frKm <= frD;
+  const chip = porKm ? txtKm(fKmR) : txtDias(fDias);
+  let nivel='ok', orden=2, clase='plain';
+  if(venceKm||venceD){ nivel='vencido'; orden=0; clase='red'; }
+  else if(prontoKm||prontoD){ nivel='pronto'; orden=1; clase='yel'; }
+  return {nivel, orden, chip, clase, u, tocaKm, tocaFecha, fr:Math.min(frKm,frD)};
+}
+function componentesOrdenados(){
+  return S.componentes.map(c => ({c, e:estado(c)})).sort((a,b) => (a.e.orden-b.e.orden) || ((a.e.fr??9)-(b.e.fr??9)));
+}
+/* Gasolina */
+function cargasOrd(){ return [...S.cargas].sort((a,b)=>(a.km-b.km)||a.fecha.localeCompare(b.fecha)); }
+function rendimiento(){
+  const c = cargasOrd(); if(c.length<2) return null;
+  const km = c[c.length-1].km - c[0].km;
+  const l = c.slice(0,-1).reduce((s,x)=>s+x.litros,0);
+  if(km<=0 || l<=0) return null;
+  return km/l;
+}
+function kmAntesReserva(){
+  const r = rendimiento(); const c = cargasOrd(); if(!r || !c.length) return null;
+  const u = c[c.length-1];
+  return Math.round(u.litros*r - (kmActual()-u.km));
+}
+function diasSinRespaldo(){ return S.ultimoRespaldo ? difDias(S.ultimoRespaldo.slice(0,10), hoy()) : null; }
+function hayDatos(){ return S.kms.length || S.cargas.length || S.servicios.length || S.gastos.length; }
+
+/* ========= Íconos ========= */
+const I = {
+  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  tool:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>',
+  gas:'<path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M4 10h10M14 8l3 3v6a1.5 1.5 0 0 0 3 0V9l-3-3"/>',
+  chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  save:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  gauge:'<path d="M12 14l4-4"/><path d="M3.3 19a10 10 0 1 1 17.4 0"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  bag:'<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/>',
+  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14zM20 17v4H6.5A2.5 2.5 0 0 1 4 19.5"/>',
+  chev:'<path d="M9 18l6-6-6-6"/>', left:'<path d="M15 18l-6-6 6-6"/>',
+  trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>'
+};
+const ico = (n,s=22,w=2) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
+const chev = `<span style="color:#5B636C;display:flex">${ico('chev',16,2.2)}</span>`;
+const atras = (href,txt='Atrás') => `<a class="back" href="${href}">${ico('left',20)} ${txt}</a>`;
+
+/* ========= Pantallas ========= */
+const V = {};
+
+V.inicio = () => {
+  const km = kmActual();
+  const lista = componentesOrdenados().filter(x => x.e.nivel==='vencido' || x.e.nivel==='pronto');
+  const sigue = componentesOrdenados().find(x => x.e.nivel==='ok');
+  const rr = kmAntesReserva(), r = rendimiento();
+  const dsr = diasSinRespaldo();
+  const mes = hoy().slice(0,7);
+  const gMes = gastosDe(x => x.slice(0,7)===mes);
+  let h = `<div class="top"><div><h1>Mi Rocketman</h1><div class="sub">${km ? 'Moto en '+fKm(km) : 'Sin kilometraje todavía'}</div></div>
+    <a class="iconbtn" href="#/ajustes" aria-label="Ajustes de la moto">${ico('gear',20)}</a></div><div class="stack">`;
+  if(!km) h += `<div class="msg info">Para empezar, registra el kilometraje que marca tu moto hoy. Después, en Servicios, captura cuándo se hizo cada servicio por última vez para que la app te avise.</div>`;
+  if(hayDatos() && (dsr===null || dsr>=30)) h += `<a class="msg warn" style="text-decoration:none;display:block" href="#/respaldo">${dsr===null?'Todavía no has hecho ningún respaldo.':'Tu último respaldo fue hace '+dsr+' días.'} Tus datos viven solo en este iPhone. Toca aquí para respaldar.</a>`;
+  if(rr!=null){
+    h += `<div class="card ${rr<=0?'red':''}"><div class="sub">${rr>0?'Te quedan aproximadamente':'Ya deberías ir en reserva'}</div>
+      <div class="big">${rr>0?fKm(rr):'0 km'}</div><div class="det">antes de tu reserva · rendimiento promedio ${fNum(r,1)} km/L</div>
+      <div class="det">Calculado suponiendo que cargas cuando llegas a la reserva.</div></div>`;
+  } else if(km) {
+    h += `<div class="card"><div class="ttl">Cuánto te queda de gasolina</div><div class="det">Registra al menos dos cargas para calcular tu rendimiento y cuántos km te quedan antes de la reserva.</div></div>`;
+  }
+  h += `<div class="grid2">
+    <a class="qa" href="#/km">${ico('gauge',24)}Registrar km</a>
+    <a class="qa" href="#/gas">${ico('gas',24)}Cargar gasolina</a>
+    <a class="qa" href="#/servicio-nuevo">${ico('tool',24)}Registrar servicio</a>
+    <a class="qa" href="#/gasto">${ico('bag',24)}Otro gasto</a></div>`;
+  h += `<h2>Atender pronto</h2>`;
+  if(lista.length) h += lista.map(x => tarjetaComp(x.c,x.e)).join('');
+  else h += `<div class="card"><div class="ttl">Todo al día</div><div class="det">${sigue ? 'Lo siguiente: '+esc(sigue.c.nombre)+' · '+sigue.e.chip.toLowerCase() : 'Captura el último servicio de cada componente para recibir avisos.'}</div></div>`;
+  h += `<h2>Este mes</h2><div class="group">
+    <div><span class="grow">Gasolina</span><b>${fMx(gMes.gas)}</b></div>
+    <div><span class="grow">Mantenimiento</span><b>${fMx(gMes.mant)}</b></div>
+    <div><span class="grow">Otros gastos</span><b>${fMx(gMes.otros)}</b></div>
+    <a href="#/reportes"><span class="grow" style="color:var(--acc);font-weight:600">Ver reportes</span>${chev}</a></div>`;
+  return h + `</div>`;
+};
+
+function tarjetaComp(c,e){
+  const u = e.u; let l1 = intervaloTxt(c);
+  if(u) l1 += ' · Último: '+(u.km!=null?fKm(u.km):fFecha(u.fecha));
+  if(e.tocaKm!=null) l1 += ' · Toca: '+fKm(e.tocaKm); else if(e.tocaFecha) l1 += ' · Toca: '+fFecha(e.tocaFecha);
+  return `<a class="card ${e.clase==='red'?'red':e.clase==='yel'?'yel':''}" href="#/comp/${c.id}"><div class="cardrow"><div class="grow">
+    <div class="cardrow" style="justify-content:space-between;gap:8px"><span class="ttl">${esc(c.nombre)}</span><span class="chip ${e.clase}">${esc(e.chip)}</span></div>
+    <div class="det">${esc(l1)}${c.detalle?'<br>'+esc(c.detalle):''}</div></div>${chev}</div></a>`;
+}
+
+V.km = () => {
+  const km = kmActual();
+  return `${atras('#/inicio')}<div class="top"><div><h1>Registrar km</h1><div class="sub">${km?'Último registrado: '+fKm(km):'Primer registro'}</div></div></div>
+  <form data-form="km" novalidate>
+    <label class="f">Kilometraje que marca la moto<div class="unit"><input name="km" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required><span>km</span></div></label>
+    <label class="f">Fecha<input type="date" name="fecha" value="${hoy()}" required></label>
+    <div data-msg></div>
+    <button class="btn" type="submit">Guardar kilometraje</button>
+  </form>
+  ${S.kms.length?`<h2>Registros anteriores</h2><a class="btn sec" href="#/kmhist">Ver registros de kilometraje</a>`:''}`;
+};
+
+V.kmhist = () => {
+  const l = [...S.kms].sort((a,b)=>b.km-a.km);
+  return `${atras('#/km')}<div class="top"><h1>Registros de km</h1></div>
+  ${l.length?`<div class="group">${l.map(x=>`<div><span class="grow"><span class="nm">${fKm(x.km)}</span><br><span class="sub">${fFecha(x.fecha)}</span></span><button class="del" data-act="borrar" data-tipo="kms" data-id="${x.id}" aria-label="Borrar registro de ${fKm(x.km)}">${ico('trash',18)}</button></div>`).join('')}</div>`:'<div class="empty">Sin registros.</div>'}`;
+};
+
+function ultimoPrecio(tipo){ const c=[...S.cargas].filter(x=>x.tipo===tipo).sort((a,b)=>b.fecha.localeCompare(a.fecha)||b.km-a.km)[0]; return c?c.precioL:''; }
+V.gas = () => {
+  const ult = [...S.cargas].sort((a,b)=>b.km-a.km)[0];
+  const tipo = ult ? ult.tipo : 'Premium';
+  return `${atras('#/inicio')}<div class="top"><div><h1>Cargar gasolina</h1><div class="sub">${kmActual()?'Moto en '+fKm(kmActual()):''}</div></div></div>
+  <form data-form="gas" novalidate>
+    <label class="f">Kilometraje al cargar<div class="unit"><input name="km" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required><span>km</span></div></label>
+    <label class="f">Cuánto pagaste<div class="unit"><input name="monto" inputmode="decimal" autocomplete="off" required><span>$</span></div></label>
+    <div class="f" style="display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--mut2);font-weight:600">Tipo de gasolina
+      <div class="seg" role="radiogroup">
+        <input type="radio" id="tM" name="tipo" value="Magna" ${tipo==='Magna'?'checked':''}><label for="tM">Magna</label>
+        <input type="radio" id="tP" name="tipo" value="Premium" ${tipo==='Premium'?'checked':''}><label for="tP">Premium</label>
+      </div></div>
+    <label class="f">Precio por litro<div class="unit"><input name="precio" inputmode="decimal" autocomplete="off" value="${ultimoPrecio(tipo)}" required><span>$/L</span></div><small>Se llena con el último precio que capturaste de ese tipo.</small></label>
+    <div class="calc"><span class="sub">Litros cargados</span><b data-litros>—</b></div>
+    <label class="f">Fecha<input type="date" name="fecha" value="${hoy()}" required></label>
+    <div data-msg></div>
+    <button class="btn" type="submit">Guardar carga</button>
+  </form>`;
+};
+
+V.gashist = () => {
+  const l = [...S.cargas].sort((a,b)=>b.km-a.km||b.fecha.localeCompare(a.fecha));
+  const r = rendimiento();
+  return `<div class="top"><div><h1>Gasolina</h1><div class="sub">${r?'Rendimiento promedio: '+fNum(r,1)+' km/L':'Con dos cargas se calcula tu rendimiento'}</div></div>
+    <a class="btn sm" href="#/gas">${ico('plus',18,2.4)}Cargar</a></div>
+  <div class="stack">
+  ${l.length?`<div class="group">${l.map(x=>`<div><span class="grow"><span class="nm">${fMx(x.monto)} · ${fNum(x.litros,2)} L</span><br><span class="sub">${fFecha(x.fecha)} · ${fKm(x.km)} · ${esc(x.tipo)} a ${fMx(x.precioL)}/L</span></span><button class="del" data-act="borrar" data-tipo="cargas" data-id="${x.id}" aria-label="Borrar carga del ${fFecha(x.fecha)}">${ico('trash',18)}</button></div>`).join('')}</div>`
+    :'<div class="card empty">Todavía no registras cargas de gasolina.</div>'}
+  <a class="btn sec" href="#/kmhist">Registros de kilometraje</a></div>`;
+};
+
+V.servicios = () => {
+  const todos = componentesOrdenados();
+  const urg = todos.filter(x=>x.e.nivel==='vencido'||x.e.nivel==='pronto');
+  const sig = todos.filter(x=>x.e.nivel==='ok'||x.e.nivel==='nore');
+  const sin = todos.filter(x=>x.e.nivel==='sin');
+  const faltan = todos.filter(x=>x.e.nivel==='nore').length;
+  let h = `<div class="top"><div><h1>Servicios</h1><div class="sub">${kmActual()?'Moto en '+fKm(kmActual()):''}</div></div>
+    <a class="btn sm" href="#/servicio-nuevo">${ico('plus',18,2.4)}Registrar</a></div><div class="stack">
+    <a class="card acc" href="#/manual"><div class="cardrow"><span style="color:var(--acc);display:flex">${ico('book',24)}</span><div class="grow"><div class="ttl">Manual de servicio</div><div class="det" style="color:var(--mut2)">Intervalos y datos de la Rocketman 300</div></div>${chev}</div></a>`;
+  if(faltan) h += `<div class="msg info">${faltan} ${faltan===1?'componente no tiene':'componentes no tienen'} registro. Toca cada uno, luego Editar, y captura cuándo se hizo por última vez para que te avise.</div>`;
+  if(urg.length) h += `<h2>Atender pronto</h2>` + urg.map(x=>tarjetaComp(x.c,x.e)).join('');
+  if(sig.length) h += `<h2>Lo que sigue</h2><div class="group">${sig.map(x=>`<a href="#/comp/${x.c.id}"><span class="grow nm ell">${esc(x.c.nombre)}</span><span class="chip ${x.e.clase}">${esc(x.e.chip)}</span>${chev}</a>`).join('')}</div>`;
+  if(sin.length) h += `<h2>Sin intervalo: se registran al cambiarlas</h2><div class="group">${sin.map(x=>`<a href="#/comp/${x.c.id}"><span class="grow nm ell">${esc(x.c.nombre)}</span><span class="chip ${x.e.clase}">${esc(x.e.chip)}</span>${chev}</a>`).join('')}</div>`;
+  h += `<a class="btn dash" href="#/comp-editar/nuevo">${ico('plus',18,2.4)}Agregar componente</a>
+    <a class="btn sec" href="#/servicios-hist">Historial de servicios (${S.servicios.length})</a></div>`;
+  return h;
+};
+
+V.comp = id => {
+  const c = comp(id); if(!c) return noExiste();
+  const e = estado(c);
+  const hist = S.servicios.filter(s=>s.conceptos.some(k=>k.compId===id)).sort(ordenServ);
+  let h = `${atras('#/servicios','Servicios')}<div class="top"><div><h1 style="font-size:26px">${esc(c.nombre)}</h1><div class="sub">${esc(intervaloTxt(c))}</div></div></div><div class="stack">`;
+  h += `<div class="group">
+    <div><span class="grow">Estado</span><span class="chip ${e.clase}">${esc(e.chip)}</span></div>
+    ${e.u?`<div><span class="grow">Último</span><b>${[e.u.km!=null?fKm(e.u.km):'',e.u.fecha?fFecha(e.u.fecha):''].filter(Boolean).join(' · ')}</b></div>`:''}
+    ${e.tocaKm!=null?`<div><span class="grow">Toca por km</span><b>${fKm(e.tocaKm)}</b></div>`:''}
+    ${e.tocaFecha?`<div><span class="grow">Toca por fecha</span><b>${fFecha(e.tocaFecha)}</b></div>`:''}
+  </div>`;
+  if(e.u && e.u.inicio) h += `<div class="sub" style="padding:0 4px">El último dato es el punto de partida que capturaste en Editar.</div>`;
+  if(c.detalle) h += `<div class="card"><div class="sub">Incluye</div><div style="margin-top:4px">${esc(c.detalle)}</div></div>`;
+  h += `<a class="btn" href="#/servicio-nuevo/${c.id}">Registrar este servicio</a><a class="btn sec" href="#/comp-editar/${c.id}">Editar</a>`;
+  h += `<h2>Historial</h2>` + (hist.length ? `<div class="group">${hist.map(s=>{const k=s.conceptos.filter(k=>k.compId===id);const imp=k.reduce((t,x)=>t+(x.importe||0),0);return `<a href="#/servicio/${s.id}"><span class="grow"><span class="nm">${fFecha(s.fecha)}${s.km!=null?' · '+fKm(s.km):''}</span><br><span class="sub">${esc(s.taller||'Sin taller')}</span></span><b>${fMx(imp)}</b>${chev}</a>`}).join('')}</div>` : '<div class="card empty">Sin servicios registrados.</div>');
+  return h + `</div>`;
+};
+
+V['comp-editar'] = id => {
+  const nuevo = id==='nuevo'; const c = nuevo ? {nombre:'',detalle:''} : comp(id);
+  if(!c) return noExiste();
+  const v = x => x==null ? '' : x;
+  return `${atras(nuevo?'#/servicios':'#/comp/'+id)}<div class="top"><h1 style="font-size:26px">${nuevo?'Nuevo componente':'Editar'}</h1></div>
+  <form data-form="comp" data-id="${esc(id)}" novalidate>
+    <label class="f">Nombre<input name="nombre" value="${esc(c.nombre)}" required></label>
+    <label class="f">Qué incluye <small>Opcional</small><textarea name="detalle">${esc(c.detalle)}</textarea></label>
+    <h2 style="margin:6px 0 -4px">Cada cuánto</h2>
+    <div class="msg info">Llena lo que aplique; avisa con lo que llegue primero. Déjalo vacío si no tiene intervalo.</div>
+    <label class="f">Cada cuántos km<div class="unit"><input name="intKm" inputmode="numeric" value="${v(c.intKm)}"><span>km</span></div></label>
+    <div class="grid2">
+      <label class="f">Cada cuántos meses<input name="intMeses" inputmode="numeric" value="${v(c.intMeses)}"></label>
+      <label class="f">o cada cuántos días<input name="intDias" inputmode="numeric" value="${v(c.intDias)}"></label>
+    </div>
+    <h2 style="margin:6px 0 -4px">Punto de partida</h2>
+    <div class="msg info">Cuándo se hizo por última vez, aunque sea aproximado. Si registras un servicio en la app, ese manda.</div>
+    <label class="f">Último a los<div class="unit"><input name="inicioKm" inputmode="numeric" value="${v(c.inicioKm)}"><span>km</span></div></label>
+    <label class="f">Fecha del último<input type="date" name="inicioFecha" value="${v(c.inicioFecha)}"></label>
+    <div data-msg></div>
+    <button class="btn" type="submit">Guardar</button>
+    ${nuevo?'':`<button class="btn danger" type="button" data-act="borrarComp" data-id="${esc(id)}">Borrar componente</button>`}
+  </form>`;
+};
+
+V['servicio-nuevo'] = pre => {
+  const opts = sel => `<option value="">Otro concepto</option>` + S.componentes.map(c=>`<option value="${c.id}" ${c.id===sel?'selected':''}>${esc(c.nombre)}</option>`).join('');
+  window.__opts = opts;
+  return `${atras(pre?'#/comp/'+pre:'#/servicios')}<div class="top"><h1>Registrar servicio</h1></div>
+  <form data-form="servicio" novalidate>
+    <div class="grid2">
+      <label class="f">Fecha<input type="date" name="fecha" value="${hoy()}" required></label>
+      <label class="f">Kilometraje<input name="km" inputmode="numeric" autocomplete="off" value="${kmActual()||''}" required></label>
+    </div>
+    <label class="f">Taller o mecánico <small>Opcional</small><input name="taller" autocomplete="off"></label>
+    <label class="f">Folio o nota <small>Opcional</small><input name="folio" autocomplete="off"></label>
+    <h2 style="margin:6px 0 -4px">Conceptos</h2>
+    <div class="stack" data-conceptos>${filaConcepto(opts(pre||''))}</div>
+    <button class="link" type="button" data-act="addConcepto">+ Agregar concepto</button>
+    <div class="calc"><span class="sub">Total</span><b data-total>$0.00</b></div>
+    <div data-msg></div>
+    <button class="btn" type="submit">Guardar servicio</button>
+  </form>`;
+};
+function filaConcepto(opts){
+  return `<div class="concepto" data-concepto>
+    <label class="f">Componente<select name="compId">${opts}</select></label>
+    <div class="two"><label class="f">Descripción<input name="desc" autocomplete="off" placeholder="Ej. aceite 10W-40"></label>
+    <label class="f">Importe<input name="importe" inputmode="decimal" autocomplete="off" placeholder="$"></label></div>
+    <button class="link" type="button" data-act="quitarConcepto" style="align-self:flex-start;color:var(--mut)">Quitar concepto</button></div>`;
+}
+
+V['servicios-hist'] = () => {
+  const l = [...S.servicios].sort(ordenServ);
+  return `${atras('#/servicios','Servicios')}<div class="top"><h1>Historial de servicios</h1></div>
+  ${l.length?`<div class="group">${l.map(s=>`<a href="#/servicio/${s.id}"><span class="grow"><span class="nm">${fFecha(s.fecha)}${s.km!=null?' · '+fKm(s.km):''}</span><br><span class="sub ell" style="display:block">${esc(s.conceptos.map(k=>k.compId&&comp(k.compId)?comp(k.compId).nombre:k.desc).filter(Boolean).join(', '))}</span></span><b>${fMx(totalServicio(s))}</b>${chev}</a>`).join('')}</div>`:'<div class="card empty">Sin servicios registrados.</div>'}`;
+};
+
+V.servicio = id => {
+  const s = S.servicios.find(x=>x.id===id); if(!s) return noExiste();
+  return `${atras('#/servicios-hist','Historial')}<div class="top"><div><h1 style="font-size:26px">Servicio</h1><div class="sub">${fFecha(s.fecha)}${s.km!=null?' · '+fKm(s.km):''}</div></div></div><div class="stack">
+  <div class="group">
+    <div><span class="grow">Taller</span><b>${esc(s.taller||'—')}</b></div>
+    <div><span class="grow">Folio</span><b>${esc(s.folio||'—')}</b></div>
+  </div>
+  <h2>Conceptos</h2><div class="group">${s.conceptos.map(k=>{const c=k.compId&&comp(k.compId);return `<div><span class="grow"><span class="nm">${esc(c?c.nombre:(k.desc||'Concepto'))}</span>${c&&k.desc?'<br><span class="sub">'+esc(k.desc)+'</span>':''}</span><b>${fMx(k.importe||0)}</b></div>`}).join('')}
+  <div><span class="grow nm">Total</span><b style="font-size:18px">${fMx(totalServicio(s))}</b></div></div>
+  <button class="btn danger" type="button" data-act="borrar" data-tipo="servicios" data-id="${s.id}" data-volver="#/servicios-hist">Borrar servicio</button></div>`;
+};
+
+V.gasto = () => {
+  const l = [...S.gastos].sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  return `${atras('#/inicio')}<div class="top"><h1>Otro gasto</h1></div>
+  <form data-form="gasto" novalidate>
+    <label class="f">Concepto<input name="concepto" autocomplete="off" placeholder="Ej. asiento, cajita, casco" required></label>
+    <label class="f">Importe<div class="unit"><input name="importe" inputmode="decimal" autocomplete="off" required><span>$</span></div></label>
+    <label class="f">Fecha<input type="date" name="fecha" value="${hoy()}" required></label>
+    <div data-msg></div>
+    <button class="btn" type="submit">Guardar gasto</button>
+  </form>
+  ${l.length?`<h2>Gastos registrados</h2><div class="group">${l.map(x=>`<div><span class="grow"><span class="nm">${esc(x.concepto)}</span><br><span class="sub">${fFecha(x.fecha)}</span></span><b>${fMx(x.importe)}</b><button class="del" data-act="borrar" data-tipo="gastos" data-id="${x.id}" aria-label="Borrar ${esc(x.concepto)}">${ico('trash',18)}</button></div>`).join('')}</div>`:''}`;
+};
+
+function gastosDe(filtro){
+  const r = {gas:0, mant:0, otros:0, litros:0};
+  S.cargas.forEach(x=>{ if(filtro(x.fecha)){ r.gas+=x.monto; r.litros+=x.litros; } });
+  S.servicios.forEach(x=>{ if(filtro(x.fecha)) r.mant+=totalServicio(x); });
+  S.gastos.forEach(x=>{ if(filtro(x.fecha)) r.otros+=x.importe; });
+  r.total = r.gas+r.mant+r.otros; return r;
+}
+V.reportes = anio => {
+  const y = anio || hoy().slice(0,4);
+  const anios = new Set([hoy().slice(0,4)]);
+  [...S.cargas,...S.servicios,...S.gastos].forEach(x=>anios.add(x.fecha.slice(0,4)));
+  const lista = [...anios].sort().reverse();
+  const tot = gastosDe(f=>f.slice(0,4)===y);
+  let filas = '';
+  for(let m=1;m<=12;m++){
+    const k = y+'-'+String(m).padStart(2,'0'); const g = gastosDe(f=>f.slice(0,7)===k);
+    if(g.total) filas += `<tr><td>${MESES_L[m-1]}</td><td>${fMx(g.gas,0)}</td><td>${fMx(g.mant,0)}</td><td>${fMx(g.otros,0)}</td><td><b>${fMx(g.total,0)}</b></td></tr>`;
+  }
+  return `<div class="top"><div><h1>Reportes</h1><div class="sub">Lo que has gastado en la moto</div></div></div><div class="stack">
+  <label class="f">Año<select data-act="anio">${lista.map(a=>`<option ${a===y?'selected':''}>${a}</option>`).join('')}</select></label>
+  <div class="card"><div class="sub">Total ${y}</div><div class="big">${fMx(tot.total,0)}</div>
+    <div class="det">Gasolina ${fMx(tot.gas,0)} · Mantenimiento ${fMx(tot.mant,0)} · Otros ${fMx(tot.otros,0)}</div>
+    ${tot.litros?`<div class="det">${fNum(tot.litros,1)} L cargados · ${fMx(tot.gas/tot.litros)}/L en promedio</div>`:''}</div>
+  <h2>Por mes</h2>
+  ${filas?`<div class="scroll"><table><thead><tr><th>Mes</th><th>Gasolina</th><th>Manten.</th><th>Otros</th><th>Total</th></tr></thead><tbody>${filas}
+    <tr class="tot"><td>Total</td><td>${fMx(tot.gas,0)}</td><td>${fMx(tot.mant,0)}</td><td>${fMx(tot.otros,0)}</td><td>${fMx(tot.total,0)}</td></tr></tbody></table></div>`
+  :'<div class="card empty">Sin gastos en '+y+'.</div>'}</div>`;
+};
+
+V.respaldo = () => {
+  const d = diasSinRespaldo();
+  return `<div class="top"><div><h1>Respaldo</h1><div class="sub">${S.ultimoRespaldo?'Último respaldo: '+fFecha(S.ultimoRespaldo.slice(0,10))+(d?' (hace '+d+' días)':' (hoy)'):'Todavía no has hecho ningún respaldo'}</div></div></div><div class="stack">
+  <div class="msg info">Tus datos se guardan solo en este iPhone, dentro de esta app. Si borras la app de tu pantalla de inicio o cambias de celular, se pierden. Haz un respaldo una vez al mes y guárdalo en iCloud Drive o mándatelo por correo.</div>
+  <button class="btn" type="button" data-act="exportar">${ico('save',20)}Hacer respaldo</button>
+  <h2>Recuperar datos</h2>
+  <div class="msg warn">Al cargar un respaldo se reemplazan todos los datos que tiene la app ahorita.</div>
+  <label class="btn sec" for="imp">Cargar un respaldo</label>
+  <input id="imp" type="file" accept=".json,application/json" data-act="importar" style="display:none">
+  <h2>Lo que tienes guardado</h2>
+  <div class="group">
+    <div><span class="grow">Registros de km</span><b>${S.kms.length}</b></div>
+    <div><span class="grow">Cargas de gasolina</span><b>${S.cargas.length}</b></div>
+    <div><span class="grow">Servicios</span><b>${S.servicios.length}</b></div>
+    <div><span class="grow">Otros gastos</span><b>${S.gastos.length}</b></div>
+  </div></div>`;
+};
+
+V.ajustes = () => {
+  const a = S.ajustes, r = rendimiento();
+  return `${atras('#/inicio')}<div class="top"><h1>Ajustes de la moto</h1></div>
+  <form data-form="ajustes" novalidate>
+    <label class="f">Capacidad del tanque<div class="unit"><input name="capacidad" inputmode="decimal" value="${a.capacidad}" required><span>L</span></div><small>Si una carga pasa de esta cantidad, la app te avisa.</small></label>
+    <label class="f">Tu reserva<div class="unit"><input name="reserva" inputmode="decimal" value="${a.reserva}" required><span>L</span></div><small>El manual marca 3.5 L.</small></label>
+    <div data-msg></div>
+    <button class="btn" type="submit">Guardar cambios</button>
+  </form>
+  ${r?`<h2>Con tu rendimiento de ${fNum(r,1)} km/L</h2><div class="group"><div><span class="grow">Tanque lleno hasta tu reserva</span><b>${fKm((a.capacidad-a.reserva)*r)}</b></div><div><span class="grow">Tanque lleno hasta vacío</span><b>${fKm(a.capacidad*r)}</b></div></div>`:''}
+  <h2>Más</h2><div class="group"><a href="#/manual"><span class="grow nm">Manual de servicio</span>${chev}</a><a href="#/servicios"><span class="grow nm">Componentes y avisos</span>${chev}</a></div>`;
+};
+
+V.manual = () => {
+  const kv = (k,v,n) => `<div class="kv"><span>${k}</span><span>${v}</span></div>${n?`<div class="note">${n}</div>`:''}`;
+  const conInt = S.componentes.filter(c=>c.intKm||c.intMeses||c.intDias);
+  return `${atras('#/servicios','Servicios')}<div class="top"><div><h1>Manual de servicio</h1><div class="sub">Vento Rocketman 300</div></div></div><div class="stack">
+  <h2 style="margin-top:4px">Intervalos (lo que pase primero)</h2>
+  <div class="group">${conInt.map(c=>`<a href="#/comp/${c.id}"><span class="grow"><span class="nm">${esc(c.nombre)}</span><br><span class="sub">${esc(intervaloTxt(c))}</span></span>${chev}</a>`).join('')}</div>
+  <h2>Gasolina y aceite</h2><div class="card" style="padding:0">
+    ${kv('Gasolina recomendada','90 octanos o más','La Premium cumple; la Magna (87) queda abajo.')}
+    ${kv('Aceite de motor','10W-40','API SG o superior, para moto de 4 tiempos.')}
+    ${kv('Cantidad de aceite','1.2 L','Una botella de 1 L no alcanza.')}</div>
+  <h2>Llantas</h2><div class="card" style="padding:0">
+    ${kv('Delantera','90/90-17')}${kv('Trasera','130/70-17')}
+    ${kv('Presión solo (del. / tras.)','29 / 33 psi')}${kv('Con pasajero (del. / tras.)','33 / 36 psi','Medida en frío, antes de rodar.')}
+    ${kv('Cambiar cuando el dibujo llegue a','1.6 / 2 mm')}</div>
+  <h2>Frenos, cadena y suspensión</h2><div class="card" style="padding:0">
+    ${kv('Líquido de frenos','DOT4','Solo DOT4. No se mezcla con otro tipo.')}${kv('Holgura de la cadena','10–20 mm','A la mitad del tramo de abajo.')}${kv('Amortiguador trasero','Posición 2 de 5')}</div>
+  <h2>Eléctrico</h2><div class="card" style="padding:0">
+    ${kv('Batería','12V 7Ah','Modelo en el manual: 12N7-4A. Confírmalo con la etiqueta de la tuya.')}${kv('Bujía','D8RC')}${kv('Fusibles','15A y 5A')}</div>
+  <h2>Revisión de la cadena (cada 1,000 km)</h2>
+  <div class="card det" style="margin:0;color:var(--mut2)">Holgura de 10 a 20 mm · seca u oxidada · eslabones pegados o torcidos · rodillos dañados o seguro flojo · dientes de la corona gastados o quebrados · tuercas de la corona flojas · nivel de líquido de frenos entre MIN y MAX.</div>
+  </div>`;
+};
+
+function noExiste(){ return `${atras('#/inicio','Inicio')}<div class="empty">Esto ya no existe.</div>`; }
+
+/* ========= Navegación ========= */
+const NAV = [['inicio','Inicio','home'],['servicios','Servicios','tool'],['gashist','Gasolina','gas'],['reportes','Reportes','chart'],['respaldo','Respaldo','save']];
+const SECCION = {km:'inicio',kmhist:'gashist',gas:'gashist',gasto:'inicio',ajustes:'inicio',comp:'servicios','comp-editar':'servicios','servicio-nuevo':'servicios','servicios-hist':'servicios',servicio:'servicios',manual:'servicios'};
+function ruta(){ const p = location.hash.replace(/^#\/?/,'').split('/'); return [p[0]||'inicio', p[1]?decodeURIComponent(p[1]):undefined]; }
+function pintar(){
+  const [r,p] = ruta(); const f = V[r] || V.inicio;
+  document.getElementById('app').innerHTML = f(p);
+  const sec = V[r] ? (SECCION[r]||r) : 'inicio';
+  document.getElementById('nav').innerHTML = NAV.map(([k,t,i])=>`<a href="#/${k}" class="${k===sec?'on':''}" ${k===sec?'aria-current="page"':''}>${ico(i)}${t}</a>`).join('');
+  window.scrollTo(0,0);
+}
+function ir(h){ if(location.hash===h) pintar(); else location.hash = h; }
+window.addEventListener('hashchange', pintar);
+let tt; function aviso(t){ const e=document.getElementById('toast'); e.textContent=t; e.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove('on'),2200); }
+function mensaje(form, tipo, html){ const m=form.querySelector('[data-msg]'); m.innerHTML = html ? `<div class="msg ${tipo}">${html}</div>` : ''; if(html) m.scrollIntoView({block:'center',behavior:'smooth'}); }
+
+/* ========= Formularios ========= */
+const F = {};
+F.km = f => {
+  const km = num(f.elements["km"].value), act = kmActual();
+  if(km==null || km<=0) return mensaje(f,'err','Escribe el kilometraje que marca el tablero, solo números.');
+  if(km < act) return mensaje(f,'err',`El kilometraje no puede ser menor que el último registrado (${fKm(act)}). Revisa el número del tablero.`);
+  S.kms.push({id:uid(), fecha:f.elements["fecha"].value||hoy(), km:Math.round(km)});
+  if(guardar()){ aviso('Kilometraje guardado'); ir('#/inicio'); }
+};
+function litrosDe(f){ const m=num(f.elements["monto"].value), p=num(f.elements["precio"].value); return (m&&p) ? m/p : null; }
+F.gas = (f, forzar) => {
+  const km=num(f.elements["km"].value), monto=num(f.elements["monto"].value), precio=num(f.elements["precio"].value), act=kmActual();
+  if(km==null||km<=0) return mensaje(f,'err','Escribe el kilometraje al momento de cargar.');
+  if(km<act) return mensaje(f,'err',`El kilometraje no puede ser menor que el último registrado (${fKm(act)}).`);
+  if(!monto||monto<=0) return mensaje(f,'err','Escribe cuánto pagaste.');
+  if(!precio||precio<=0) return mensaje(f,'err','Escribe el precio por litro que marca la bomba.');
+  const litros = monto/precio;
+  if(litros > S.ajustes.capacidad && !forzar){
+    return mensaje(f,'warn',`Salen ${fNum(litros,2)} L y tu tanque es de ${fNum(S.ajustes.capacidad,1)} L, así que no cabrían. Revisa el monto y el precio por litro.<br><button class="btn sec" type="button" data-act="gasForzar" style="margin-top:10px">Guardar de todos modos</button>`);
+  }
+  S.cargas.push({id:uid(), fecha:f.elements["fecha"].value||hoy(), km:Math.round(km), monto, tipo:f.elements["tipo"].value, precioL:precio, litros});
+  if(guardar()){ aviso('Carga guardada'); ir('#/gashist'); }
+};
+F.comp = f => {
+  const id=f.dataset.id, nombre=f.elements["nombre"].value.trim();
+  if(!nombre) return mensaje(f,'err','Ponle un nombre al componente.');
+  const ent = n => { const v=num(f.elements[n].value); return v&&v>0?Math.round(v):null; };
+  const datos = {nombre, detalle:f.elements["detalle"].value.trim(), intKm:ent('intKm'), intMeses:ent('intMeses'), intDias:ent('intDias'), inicioKm:(num(f.elements["inicioKm"].value)!=null?Math.round(num(f.elements["inicioKm"].value)):null), inicioFecha:f.elements["inicioFecha"].value||null};
+  if(datos.intMeses && datos.intDias) return mensaje(f,'err','Usa meses o días, no los dos.');
+  if(id==='nuevo'){ const c={id:uid(),...datos}; S.componentes.push(c); if(guardar()){ aviso('Componente agregado'); ir('#/comp/'+c.id); } }
+  else { Object.assign(comp(id), datos); if(guardar()){ aviso('Cambios guardados'); ir('#/comp/'+id); } }
+};
+F.servicio = f => {
+  const km=num(f.elements["km"].value);
+  if(km==null||km<=0) return mensaje(f,'err','Escribe el kilometraje del servicio; con él se calcula cuándo toca el siguiente.');
+  const conceptos = [...f.querySelectorAll('[data-concepto]')].map(r=>({compId:r.querySelector('[name=compId]').value||null, desc:r.querySelector('[name=desc]').value.trim(), importe:num(r.querySelector('[name=importe]').value)||0})).filter(k=>k.compId||k.desc||k.importe);
+  if(!conceptos.length) return mensaje(f,'err','Agrega al menos un concepto: el componente o una descripción.');
+  if(conceptos.some(k=>!k.compId&&!k.desc)) return mensaje(f,'err','Cada concepto de "Otro concepto" necesita una descripción.');
+  S.servicios.push({id:uid(), fecha:f.elements["fecha"].value||hoy(), km:Math.round(km), taller:f.elements["taller"].value.trim(), folio:f.elements["folio"].value.trim(), conceptos});
+  if(guardar()){ aviso('Servicio guardado'); ir('#/servicios'); }
+};
+F.gasto = f => {
+  const c=f.elements["concepto"].value.trim(), imp=num(f.elements["importe"].value);
+  if(!c) return mensaje(f,'err','Escribe qué compraste.');
+  if(!imp||imp<=0) return mensaje(f,'err','Escribe el importe.');
+  S.gastos.push({id:uid(), fecha:f.elements["fecha"].value||hoy(), concepto:c, importe:imp});
+  if(guardar()){ aviso('Gasto guardado'); pintar(); }
+};
+F.ajustes = f => {
+  const cap=num(f.elements["capacidad"].value), res=num(f.elements["reserva"].value);
+  if(!cap||cap<=0) return mensaje(f,'err','Escribe la capacidad del tanque en litros.');
+  if(res==null||res<0||res>=cap) return mensaje(f,'err','La reserva debe ser menor que la capacidad del tanque.');
+  S.ajustes={capacidad:cap, reserva:res};
+  if(guardar()){ aviso('Ajustes guardados'); pintar(); }
+};
+document.addEventListener('submit', e => { const f=e.target; if(!f.dataset.form) return; e.preventDefault(); F[f.dataset.form](f); });
+document.addEventListener('input', e => {
+  const f = e.target.form; if(!f) return;
+  if(f.dataset.form==='gas'){
+    if(e.target.name==='tipo'){ const p=ultimoPrecio(e.target.value); if(p) f.elements["precio"].value=p; }
+    const l=litrosDe(f); f.querySelector('[data-litros]').textContent = l ? fNum(l,2)+' L' : '—';
+    mensaje(f,'',''); 
+  }
+  if(f.dataset.form==='servicio'){
+    const t=[...f.querySelectorAll('[name=importe]')].reduce((s,i)=>s+(num(i.value)||0),0);
+    f.querySelector('[data-total]').textContent=fMx(t);
+  }
+});
+document.addEventListener('change', e => {
+  const t=e.target;
+  if(t.dataset.act==='anio') ir('#/reportes/'+t.value);
+  if(t.dataset.act==='importar' && t.files[0]) importar(t.files[0]);
+  if(t.form && t.form.dataset.form==='gas' && t.name==='tipo'){ const p=ultimoPrecio(t.value); if(p){ t.form.elements["precio"].value=p; const l=litrosDe(t.form); t.form.querySelector('[data-litros]').textContent=l?fNum(l,2)+' L':'—'; } }
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if(!b || b.tagName==='SELECT' || b.tagName==='INPUT') return;
+  const a = b.dataset.act;
+  if(a==='borrar'){
+    if(!confirm('¿Borrar este registro? No se puede deshacer.')) return;
+    S[b.dataset.tipo] = S[b.dataset.tipo].filter(x=>x.id!==b.dataset.id);
+    if(guardar()){ aviso('Borrado'); if(b.dataset.volver) ir(b.dataset.volver); else pintar(); }
+  }
+  if(a==='borrarComp'){
+    if(!confirm('¿Borrar este componente? Los servicios ya registrados se conservan.')) return;
+    S.componentes = S.componentes.filter(c=>c.id!==b.dataset.id);
+    if(guardar()){ aviso('Componente borrado'); ir('#/servicios'); }
+  }
+  if(a==='gasForzar') F.gas(b.closest('form'), true);
+  if(a==='addConcepto'){ b.form.querySelector('[data-conceptos]').insertAdjacentHTML('beforeend', filaConcepto(window.__opts(''))); }
+  if(a==='quitarConcepto'){ const f=b.closest('form'); const filas=f.querySelectorAll('[data-concepto]'); if(filas.length>1) b.closest('[data-concepto]').remove(); else { b.closest('[data-concepto]').querySelectorAll('input').forEach(i=>i.value=''); } f.dispatchEvent(new Event('input',{bubbles:true})); const t=[...f.querySelectorAll('[name=importe]')].reduce((s,i)=>s+(num(i.value)||0),0); f.querySelector('[data-total]').textContent=fMx(t); }
+  if(a==='exportar') exportar();
+});
+
+/* ========= Respaldo ========= */
+async function exportar(){
+  const nombre = 'respaldo-moto-'+hoy()+'.json';
+  const datos = JSON.stringify({...S, exportado:new Date().toISOString()}, null, 1);
+  const archivo = new File([datos], nombre, {type:'application/json'});
+  try{
+    if(navigator.canShare && navigator.canShare({files:[archivo]})){
+      await navigator.share({files:[archivo], title:nombre});
+    } else {
+      const u = URL.createObjectURL(archivo); const l = document.createElement('a'); l.href=u; l.download=nombre; document.body.appendChild(l); l.click(); l.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000);
+    }
+    S.ultimoRespaldo = hoy();
+    guardar(); aviso('Respaldo listo'); pintar();
+  }catch(err){ if(err && err.name==='AbortError') aviso('Respaldo cancelado'); else aviso('No se pudo hacer el respaldo'); }
+}
+function importar(file){
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const d = JSON.parse(r.result);
+      if(!d || d.v!==1 || !Array.isArray(d.cargas) || !Array.isArray(d.componentes)) throw 0;
+      if(!confirm('Esto reemplaza todos los datos actuales por los del respaldo. ¿Continuar?')) return;
+      delete d.exportado; S = d; if(guardar()){ aviso('Respaldo cargado'); ir('#/inicio'); }
+    }catch(e){ aviso('Ese archivo no es un respaldo de esta app'); }
+  };
+  r.readAsText(file);
+}
+
+/* ========= Arranque ========= */
+pintar();
+if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+</script>
+</body>
+</html>
